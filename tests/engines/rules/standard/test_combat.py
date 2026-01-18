@@ -20,7 +20,7 @@ def test_preview_attack_with_fresh_weapon(engine, empty_state):
     weapon_card = Weapon(suit=Suit.DIAMONDS, rank=6, name="Sword")
     
     # Setup: Equip the weapon (history is empty)
-    empty_state.player.weapon = EquippedWeapon(weapon=weapon_card)
+    empty_state.player.equipped = EquippedWeapon(weapon=weapon_card)
     
     # Act: Attack using the weapon
     preview = engine.preview_attack(empty_state, monster, use_weapon=True)
@@ -33,7 +33,7 @@ def test_preview_attack_damage_clamped_at_zero(engine, empty_state):
     monster = Monster(suit=Suit.SPADES, rank=4, name="Small Rat")
     weapon_card = Weapon(suit=Suit.DIAMONDS, rank=6, name="Sword")
     
-    empty_state.player.weapon = EquippedWeapon(weapon=weapon_card)
+    empty_state.player.equipped = EquippedWeapon(weapon=weapon_card)
     
     preview = engine.preview_attack(empty_state, monster, use_weapon=True)
     
@@ -47,7 +47,7 @@ def test_preview_attack_weapon_ineffective_by_history(engine, empty_state):
     # Last slain monster was Rank 5
     m_old = Monster(suit=Suit.CLUBS, rank=5, name="Previous Foe")
     weapon_card = Weapon(suit=Suit.DIAMONDS, rank=7, name="Sword")
-    empty_state.player.weapon = EquippedWeapon(weapon=weapon_card, slain_monsters=[m_old])
+    empty_state.player.equipped = EquippedWeapon(weapon=weapon_card, slain_monsters=[m_old])
     
     # Current monster is Rank 6 (Stronger than the previous one!)
     m_new = Monster(suit=Suit.SPADES, rank=6, name="Current Foe")
@@ -109,7 +109,7 @@ def test_can_use_weapon_if_equipped(engine, empty_state):
     weapon_card = Weapon(suit=Suit.DIAMONDS, rank=4, name="Dagger")
     
     empty_state.room.cards.append(monster)
-    empty_state.player.weapon = EquippedWeapon(weapon=weapon_card)
+    empty_state.player.equipped = EquippedWeapon(weapon=weapon_card)
     
     assert engine.can_attack_monster(empty_state, monster, use_weapon=True) is True
 
@@ -146,15 +146,15 @@ def test_handle_attack_updates_weapon_history(engine, empty_state):
     weapon_card = Weapon(suit=Suit.DIAMONDS, rank=8, name="Sword")
     
     empty_state.room.cards.append(monster)
-    empty_state.player.weapon = EquippedWeapon(weapon=weapon_card)
+    empty_state.player.equipped = EquippedWeapon(weapon=weapon_card)
     
     # Act: Attack using the weapon
     engine.handle_monster_attack(empty_state, monster, use_weapon=True)
     
     # Assert
     # The monster must now be the 'last_slain_monster' in history
-    assert len(empty_state.player.weapon.slain_monsters) == 1
-    assert empty_state.player.weapon.slain_monsters[-1].rank == 5
+    assert len(empty_state.player.equipped.slain_monsters) == 1
+    assert empty_state.player.equipped.slain_monsters[-1].rank == 5
 
 def test_handle_attack_bare_handed_does_not_affect_weapon(engine, empty_state):
     """
@@ -165,10 +165,10 @@ def test_handle_attack_bare_handed_does_not_affect_weapon(engine, empty_state):
     weapon_card = Weapon(suit=Suit.DIAMONDS, rank=8, name="Sword")
     
     empty_state.room.cards.append(monster)
-    empty_state.player.weapon = EquippedWeapon(weapon=weapon_card) # Fresh weapon
+    empty_state.player.equipped = EquippedWeapon(weapon=weapon_card) # Fresh weapon
     
     # Act: Attack with Fists
     engine.handle_monster_attack(empty_state, monster, use_weapon=False)
     
     # Assert: Weapon history is still empty
-    assert len(empty_state.player.weapon.slain_monsters) == 0
+    assert len(empty_state.player.equipped.slain_monsters) == 0

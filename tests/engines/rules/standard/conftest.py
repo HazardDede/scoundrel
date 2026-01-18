@@ -1,6 +1,6 @@
 import pytest
 from scoundrel.models import GameState, Player, Room, Deck
-from scoundrel.engine import StandardRulesEngine
+from scoundrel.engines import StandardRulesEngine
 
 
 @pytest.fixture

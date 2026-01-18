@@ -11,7 +11,7 @@ def test_player_initial_state():
     player = Player()
     assert player.current_life == 20
     assert player.max_life == 20
-    assert player.weapon is None
+    assert player.equipped is None
     assert player.is_dead is False
 
 def test_player_take_damage():
@@ -58,9 +58,9 @@ def test_player_equip_weapon():
     weapon_card = Weapon(suit=Suit.DIAMONDS, rank=10, name="Longsword")
     equipped = EquippedWeapon(weapon=weapon_card)
     
-    player.weapon = equipped
-    assert player.weapon.weapon.protection == 10
-    assert player.weapon.last_slain_monster is None
+    player.equipped = equipped
+    assert player.equipped.weapon.protection == 10
+    assert player.equipped.last_slain_monster is None
 
 # --- Serialization Test ---
 
@@ -69,8 +69,8 @@ def test_player_serialization():
     Ensures the player state (including weapon) can be serialized.
     """
     weapon_card = Weapon(suit=Suit.DIAMONDS, rank=8, name="Dagger")
-    player = Player(current_life=15, weapon=EquippedWeapon(weapon=weapon_card))
+    player = Player(current_life=15, equipped=EquippedWeapon(weapon=weapon_card))
     
     data = player.model_dump()
     assert data["current_life"] == 15
-    assert data["weapon"]["weapon"]["rank"] == 8
+    assert data["equipped"]["weapon"]["rank"] == 8

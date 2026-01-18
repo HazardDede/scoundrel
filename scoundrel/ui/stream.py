@@ -1,8 +1,8 @@
 import streamlit as st
-import functools
-from scoundrel.builders import BeginnerDeckBuilder
-from scoundrel.engine import StandardRulesEngine
+
 from scoundrel import models
+from scoundrel.builders.decks import BeginnerDeckBuilder
+from scoundrel.engines import StandardRulesEngine
 
 
 # --- STATE INIT ---
@@ -14,7 +14,7 @@ if 'state' not in st.session_state:
     # Initialize a fresh game state
     state = models.GameState(
         player=models.Player(),
-        deck=builder.build_deck(shuffle=True),
+        deck=builder.build(shuffle=True),
         room=models.Room(),
     )
     # Fill the first room immediately
@@ -38,8 +38,8 @@ def check_room_transition():
 
 # --- STATUS CHECKS ---
 
-is_dead = state.player.is_dead
-is_victory = state.deck.remaining == 0 and state.room.remaining == 0
+is_dead = engine.is_game_over(state) is not None
+is_victory = engine.is_victory(state) is not None
 game_active = not is_dead and not is_victory
 
 
@@ -57,7 +57,7 @@ with st.sidebar:
     st.divider()
     st.header("Ausrüstung")
     if state.player.has_weapon:
-        weapon = state.player.weapon
+        weapon = state.player.equipped
         st.success(f"🗡️ **{weapon.weapon.name}**\n\nStärke: {weapon.weapon.protection}")
         
         # English comment: Display the rank of the last monster defeated with this weapon
@@ -77,9 +77,11 @@ with st.sidebar:
 
 # --- HAUPTFELD: DER RAUM ---
 if is_dead:
-    st.error("💀 GAME OVER - Du bist im Dungeon gestorben.")
+    highscore = engine.is_game_over(state)
+    st.error(f"💀 GAME OVER - Du bist im Dungeon gestorben. Dein Highscore: {highscore}")
 elif is_victory:
-    st.success("🏆 SIEG - Du hast den Dungeon lebend verlassen!")
+    highscore = engine.is_victory(state)
+    st.success(f"🏆 SIEG - Du hast den Dungeon lebend verlassen! Dein Highscore: {highscore}")
     st.balloons()
 else:
     st.subheader(f"Aktueller Raum ({state.deck.remaining} Karten im Deck)")

@@ -12,6 +12,10 @@ CONST_MONSTER = "monster"
 CONST_POTION = "potion"
 CONST_WEAPON = "weapon"
 
+
+HighScore = int
+
+
 class Suit(str, Enum):
     SPADES = "Spades"     # Pik (Monster)
     CLUBS = "Clubs"       # Kreuz (Monster)
@@ -93,7 +97,7 @@ class Player(BaseModel):
     max_life: int = 20
     current_life: int = 20
 
-    weapon: Optional[EquippedWeapon] = None
+    equipped: Optional[EquippedWeapon] = None
 
     @property
     def is_dead(self) -> bool:
@@ -101,7 +105,7 @@ class Player(BaseModel):
 
     @property
     def has_weapon(self) -> bool:
-        return self.weapon is not None
+        return self.equipped is not None
 
     def heal(self, amount: int) -> None:
         if amount < 0: 
