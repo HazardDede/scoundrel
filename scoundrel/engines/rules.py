@@ -119,9 +119,16 @@ class StandardRulesEngine(RulesEngine):
         return state.player.current_life - penalty
 
     def is_victory(self, state: GameState) -> HighScore | None:
-        if state.deck.remaining == 0 and len(state.room.cards) == 0:
-            return state.player.current_life
-        return None
+        if state.deck.remaining > 0:
+            return None
+        if state.room.remaining > 1:
+            return None
+
+        bonus = sum(
+            card.potency for card in state.room.cards if isinstance(card, Potion)
+        )
+
+        return state.player.current_life + bonus
 
     # --- Combat Logic ---
 

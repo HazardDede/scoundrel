@@ -38,6 +38,7 @@ class Card(BaseModel):
     rank: int  # 2-10, 11 (J), 12 (Q), 13 (K), 14 (A)
     name: str
     type: str  # Override in child classes
+    emoji: Optional[str] = None
 
     @computed_field
     @property

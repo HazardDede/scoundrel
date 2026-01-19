@@ -1,13 +1,13 @@
 import os
 import functools
-from scoundrel.builders import StandardDeckBuilder
+from scoundrel.builders.decks import FantasyDeckBuilder
 from scoundrel.engines import StandardRulesEngine
 from scoundrel import models
 
 
 class ScoundrelCLI:
     def __init__(self):
-        self.builder = StandardDeckBuilder()
+        self.builder = FantasyDeckBuilder()
         self.engine = StandardRulesEngine()
         self.state = models.GameState(
             player=models.Player(),
@@ -32,7 +32,7 @@ class ScoundrelCLI:
         if p.has_weapon:
             w = p.equipped
             last = w.slain_monsters[-1].rank if w.slain_monsters else "Neu"
-            weapon_str = f"{w.weapon.name} ({last})"
+            weapon_str = f"{w.weapon.name} ⚡ {w.weapon.protection} ({last})"
             
         print(f"❤️  HP: {p.current_life}/{p.max_life} | ⚔️  Waffe: {weapon_str}")
         print(f"🃏 Deck: {self.state.deck.remaining} Karten übrig")
@@ -41,7 +41,7 @@ class ScoundrelCLI:
         # Room Cards
         print("IM RAUM:")
         for i, card in enumerate(self.state.room.cards, 1):
-            print(f"[{i}] {card.name}")
+            print(f"[{i}] {card.name} ({card.rank})")
         print("-" * 40)
 
     def get_actions(self, card_idx):
