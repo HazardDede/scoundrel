@@ -34,7 +34,7 @@ def test_weapon_in_anycard_context():
     Tests if the AnyCard Union correctly parses a Weapon from dictionary data.
     """
     data = {
-        "suit": "Diamonds",
+        "suit": "DIAMONDS",
         "rank": 9,
         "name": "Steel Sword",
         "type": "weapon"

@@ -1,3 +1,7 @@
+"""
+Scoundrel Streamlit frontend.
+"""
+
 import streamlit as st
 from scoundrel import models
 from scoundrel.builders.decks import StandardDeckBuilder, DeckFlavor
@@ -10,7 +14,7 @@ from scoundrel.engines import StandardRulesEngine
 def initialize_session():
     """Initializes the game state and engine in the session storage."""
     if 'state' not in st.session_state:
-        builder = StandardDeckBuilder(DeckFlavor.Quick)
+        builder = StandardDeckBuilder(DeckFlavor.QUICK)
         engine = StandardRulesEngine()
 
         state = models.GameState(
@@ -105,6 +109,7 @@ def render_weapon_ui(engine, state, card, idx, active):
 # --- MAIN APP LOGIC ---
 
 def main():
+    """Main entrypoint."""
     st.set_page_config(page_title="Scoundrel", layout="wide")
     st.title("🃏 Scoundrel")
 

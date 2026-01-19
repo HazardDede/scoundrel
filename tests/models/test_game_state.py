@@ -76,11 +76,11 @@ def test_gamestate_complex_deserialization():
         "deck": {"cards": []},
         "room": {
             "cards": [
-                {"suit": "Hearts", "rank": 5, "name": "Potion", "type": "potion"}
+                {"suit": "HEARTS", "rank": 5, "name": "Potion", "type": "potion"}
             ]
         },
         "slain_monsters": [
-            {"suit": "Spades", "rank": 10, "name": "Orc", "type": "monster"}
+            {"suit": "SPADES", "rank": 10, "name": "Orc", "type": "monster"}
         ]
     }
     

@@ -30,7 +30,7 @@ def test_monster_in_anycard_context():
     Verifies that the Annotated Union (AnyCard) correctly identifies a Monster dictionary.
     """
     monster_data = {
-        "suit": "Spades",
+        "suit": "SPADES",
         "rank": 14,
         "name": "Ace of Spades",
         "type": "monster"

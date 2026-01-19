@@ -31,7 +31,7 @@ def test_potion_in_anycard_context():
     Tests if the AnyCard Union correctly parses a Potion from dictionary data.
     """
     data = {
-        "suit": "Hearts",
+        "suit": "HEARTS",
         "rank": 7,
         "name": "Medium Potion",
         "type": "potion"

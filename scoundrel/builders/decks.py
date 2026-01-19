@@ -1,3 +1,11 @@
+"""
+Deck generation logic for Scoundrel.
+
+This module provides the machinery to create card decks based on different
+gameplay flavors. It uses the Builder pattern to separate the assembly
+process from the specific card distributions.
+"""
+
 from abc import ABC, abstractmethod
 
 from scoundrel import models
@@ -6,8 +14,23 @@ from .flavor import DeckFlavor
 
 
 class DeckBuilder(ABC):
+    """
+    Abstract base class for deck construction.
+
+    Provides a template method 'build' that handles common deck setup
+    steps like shuffling, while delegating the specific card creation
+    to subclasses.
+    """
     def build(self, shuffle: bool = True) -> models.Deck:
-        """Assembles and returns a new Deck object."""
+        """
+        The main entry point to create a ready-to-play deck.
+
+        Args:
+            shuffle: If True, the deck will be randomized before being returned.
+
+        Returns:
+            A populated models.Deck instance.
+        """
         deck = self._build()
 
         if shuffle:
@@ -16,33 +39,57 @@ class DeckBuilder(ABC):
 
     @abstractmethod
     def _build(self) -> models.Deck:
+        """
+        Internal implementation of card creation.
+        """
         raise NotImplementedError()
 
 
 class StandardDeckBuilder(DeckBuilder):
-    _CONFIG_MAX_RANKS = {  # Flavor -> (potion, weapon, monster)
-        DeckFlavor.Beginner: (14, 14, 14),
-        DeckFlavor.Quick: (5, 5, 8),
-        DeckFlavor.Standard: (10, 10, 14)
+    """
+    The default builder for Scoundrel decks.
+
+    Creates cards (Potions, Weapons, Monsters) based on pre-defined
+    max-rank configurations for different gameplay flavors.
+    """
+
+    # Mapping of Flavor to max ranks: (potions, weapons, monsters)
+    # Note that cards always start at rank 2.
+    _CONFIG_MAX_RANKS = {
+        DeckFlavor.BEGINNER: (14, 14, 14),
+        DeckFlavor.QUICK: (5, 5, 8),
+        DeckFlavor.STANDARD: (10, 10, 14)
     }
 
-    def __init__(self, flavor: DeckFlavor = DeckFlavor.Standard):
+    def __init__(self, flavor: DeckFlavor = DeckFlavor.STANDARD):
+        """
+        Initializes the builder with a specific flavor.
+
+        Args:
+            flavor: The preset that determines the deck's composition.
+        """
         self.flavor = flavor
 
     def _build(self) -> models.Deck:
-        cards = []
+        """
+        Assembles the card list based on the chosen flavor's rank limits.
+
+        Uses hardcoded default names ('Heiltrank', etc.)
+        which are intended to be replaced later by a Theme.
+        """
+        cards: list[models.AnyCard] = []
 
         r_potion, r_weapon, r_monster = self._CONFIG_MAX_RANKS[self.flavor]
 
         for r in range(2, r_potion + 1):
-            cards.append(models.Potion(suit=models.Suit.HEARTS, rank=r, name=f"Heiltrank"))
+            cards.append(models.Potion(suit=models.Suit.HEARTS, rank=r, name="Heiltrank"))
 
         for r in range(2, r_weapon + 1):
-            cards.append(models.Weapon(suit=models.Suit.DIAMONDS, rank=r, name=f"Schwert"))
+            cards.append(models.Weapon(suit=models.Suit.DIAMONDS, rank=r, name="Schwert"))
 
         for s in [models.Suit.SPADES, models.Suit.CLUBS]:
             for r in range(2, r_monster + 1):
-                cards.append(models.Monster(suit=s, rank=r, name=f"Monster"))
+                cards.append(models.Monster(suit=s, rank=r, name="Monster"))
 
         deck = models.Deck(cards=cards)
 

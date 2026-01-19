@@ -19,9 +19,9 @@ def test_standard_builder_total_count(builder):
 
 
 @pytest.mark.parametrize("flavor, expected_total, monsters, potions, weapons", [
-    (DeckFlavor.Beginner, 52, 26, 13, 13),
-    (DeckFlavor.Quick, 22, 14, 4, 4),
-    (DeckFlavor.Standard, 44, 26, 9, 9),
+    (DeckFlavor.BEGINNER, 52, 26, 13, 13),
+    (DeckFlavor.QUICK, 22, 14, 4, 4),
+    (DeckFlavor.STANDARD, 44, 26, 9, 9),
 ])
 def test_standard_builder_composition_stats(flavor, expected_total, monsters, potions, weapons):
     """Uses the deck's own composition property to verify card types."""

@@ -62,7 +62,7 @@ def test_card_from_dict():
     Ensures a card can be correctly reconstructed from a dictionary (JSON-like).
     """
     data = {
-        "suit": "Clubs",
+        "suit": "CLUBS",
         "rank": 8,
         "name": "Eight of Clubs",
         "type": "base"

@@ -1,3 +1,11 @@
+"""
+Fantasy-themed configuration for the Scoundrel game engine.
+
+This module contains the FANTASY_ATLAS, which maps standard card ranks
+and suits to a high-fantasy setting (Monsters, Potions, and Weapons),
+and provides the pre-configured FantasyTheme.
+"""
+
 from functools import partial
 
 from scoundrel.models import Suit
@@ -5,12 +13,12 @@ from .base import CardAtlas, CardIdentity, AtlasTheme
 
 
 # Definition of the card identities based on suit and rank.
-# This atlas serves as the lookup table for the AtlasTheme.
+# This atlas serves as the lookup table for the FantasyTheme.
 FANTASY_ATLAS: CardAtlas = {
     # --- Monsters (CLUBS)
     (Suit.CLUBS, 2): CardIdentity(name="Käfer", emoji="🪲"),
     (Suit.CLUBS, 3): CardIdentity(name="Skorpion", emoji="🦂"),
-    (Suit.CLUBS, 4): CardIdentity(name="Spinne", emoji="️"),
+    (Suit.CLUBS, 4): CardIdentity(name="Spinne", emoji="🕷️"),
     (Suit.CLUBS, 5): CardIdentity(name="Wolf", emoji="🐺"),
     (Suit.CLUBS, 6): CardIdentity(name="Bär", emoji="🐻"),
     (Suit.CLUBS, 7): CardIdentity(name="Zombie", emoji="🧟"),
@@ -68,5 +76,7 @@ FANTASY_ATLAS: CardAtlas = {
     (Suit.DIAMONDS, 14): CardIdentity(name="Weltenbrecher (Legendär)", emoji="💎"),
 }
 
-
+# Pre-configured instance of AtlasTheme.
+# Using functools.partial allows FantasyTheme to be instantiated
+# without manually passing the FANTASY_ATLAS every time.
 FantasyTheme = partial(AtlasTheme, atlas=FANTASY_ATLAS)

@@ -1,3 +1,11 @@
+"""
+Rules engine for Scoundrel.
+
+This module governs the game logic, including combat calculations,
+potion effects, equipment rules, and room transitions. It defines the
+interface for rule validation and state updates.
+"""
+
 from abc import ABC, abstractmethod
 from typing import Optional
 
@@ -6,8 +14,11 @@ from scoundrel.models import ActionPreview, GameState, HighScore, Monster, Potio
 
 class RulesEngine(ABC):
     """
-    Interface for the Scoundrel rules logic.
-    Defines what actions are possible and how they affect the GameState.
+    Abstract interface for Scoundrel rules.
+
+    Defines the contract for validating actions (can_...) and
+    executing them (handle_...), ensuring consistency across
+    different game variants.
     """
 
     # --- Game Status ---
@@ -106,6 +117,12 @@ class RulesEngine(ABC):
 
 
 class StandardRulesEngine(RulesEngine):
+    """
+    Implementation of the classic Scoundrel rules.
+
+    Includes rules for weapon effectiveness (descending monster ranks)
+    and the single-potion-per-room healing limit.
+    """
 
     # --- Game Status ---
 
@@ -155,7 +172,7 @@ class StandardRulesEngine(RulesEngine):
             return False
 
         # 3. You cannot attack with your equipped weapon if the rank of the current monster >= last slain monster rank.
-        if use_weapon and state.player.has_weapon and not self._weapon_effective(monster, state.player.equipped):
+        if use_weapon and state.player.equipped and not self._weapon_effective(monster, state.player.equipped):
             return False
 
         # 4. Standard Scoundrel: You can always attack (even if it leads to death).
@@ -170,7 +187,7 @@ class StandardRulesEngine(RulesEngine):
         state.player.current_life -= preview.damage_taken
 
         # 3. If weapon was used, update its history
-        if use_weapon and state.player.has_weapon:
+        if use_weapon and state.player.equipped:
             state.player.equipped.slain_monsters.append(monster)
 
         # 4. Remove monster from room
@@ -316,18 +333,19 @@ class StandardRulesEngine(RulesEngine):
 
     # --- Utility stuff ---
 
-    def _weapon_effective(self, monster: Monster, weapon: Weapon) -> bool:
+    def _weapon_effective(self, monster: Monster, weapon: EquippedWeapon) -> bool:
         # Standard Scoundrel Rule:
         # Weapon is only effective if current monster rank < last slain monster rank.
         # If no monster was slain yet, it's always effective.
 
-        if not weapon.last_slain_monster:  # No monster slain so far -> Weapon is effective
+        if weapon.last_slain_monster is None:  # No monster slain so far -> Weapon is effective
             return True
-        if monster.rank < weapon.last_slain_monster.rank:  # current monster rank < last slain one
+        # current monster rank < last slain one
+        if monster.rank < weapon.last_slain_monster.rank:  # type: ignore
             return True
         return False
 
-    def _monster_damage(self, monster: Monster, weapon: Optional[Weapon], use_weapon: bool) -> int:
+    def _monster_damage(self, monster: Monster, weapon: Optional[EquippedWeapon], use_weapon: bool) -> int:
         if not use_weapon:  # Fight bare-handed
             return monster.strength
         if not weapon:  # No weapon equipped

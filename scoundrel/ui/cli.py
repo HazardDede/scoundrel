@@ -1,13 +1,19 @@
-import os
+"""
+Scoundrel Console Frontend (experimental and mostly not maintained).
+"""
+
 import functools
-from scoundrel.builders.decks import FantasyDeckBuilder
-from scoundrel.engines import StandardRulesEngine
+import os
+
 from scoundrel import models
+from scoundrel.builders.decks import StandardDeckBuilder
+from scoundrel.engines import StandardRulesEngine
 
 
 class ScoundrelCLI:
+    """Scoundrel console frontend."""
     def __init__(self):
-        self.builder = FantasyDeckBuilder()
+        self.builder = StandardDeckBuilder()
         self.engine = StandardRulesEngine()
         self.state = models.GameState(
             player=models.Player(),
@@ -17,15 +23,16 @@ class ScoundrelCLI:
         self.engine.handle_next_room(self.state)
 
     def clear_screen(self):
-        # English comment: Clear terminal for Windows (cls) or Unix (clear)
+        """Clear terminal for Windows (cls) or Unix (clear)."""
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def draw_ui(self):
+        """Re-draws the screen."""
         self.clear_screen()
         print("=" * 40)
-        print(f" SCOUNDREL - CLI EDITION ")
+        print(" SCOUNDREL - CLI EDITION ")
         print("=" * 40)
-        
+
         # Player Stats
         p = self.state.player
         weapon_str = "Fäuste"
@@ -33,11 +40,11 @@ class ScoundrelCLI:
             w = p.equipped
             last = w.slain_monsters[-1].rank if w.slain_monsters else "Neu"
             weapon_str = f"{w.weapon.name} ⚡ {w.weapon.protection} ({last})"
-            
+
         print(f"❤️  HP: {p.current_life}/{p.max_life} | ⚔️  Waffe: {weapon_str}")
         print(f"🃏 Deck: {self.state.deck.remaining} Karten übrig")
         print("-" * 40)
-        
+
         # Room Cards
         print("IM RAUM:")
         for i, card in enumerate(self.state.room.cards, 1):
@@ -45,10 +52,10 @@ class ScoundrelCLI:
         print("-" * 40)
 
     def get_actions(self, card_idx):
-        # English comment: Maps card index to available engines actions
-        if not (0 <= card_idx < len(self.state.room.cards)):
+        """Maps card index to available engines actions."""
+        if not 0 <= card_idx < len(self.state.room.cards):
             return []
-            
+
         card = self.state.room.cards[card_idx]
         actions = []
 
@@ -80,10 +87,11 @@ class ScoundrelCLI:
                 "label": "Waffe ausrüsten",
                 "cmd": functools.partial(self.engine.handle_equip_weapon, self.state, card)
             })
-            
+
         return actions
 
     def play(self):
+        """Entrypoint."""
         while not self.state.player.is_dead:
             # Check Victory
             highscore = self.engine.is_victory(self.state)
@@ -92,7 +100,7 @@ class ScoundrelCLI:
                 break
 
             self.draw_ui()
-            
+
             # Additional global actions
             can_flee = self.engine.can_flee_room(self.state)
             if can_flee:
@@ -108,10 +116,10 @@ class ScoundrelCLI:
             try:
                 idx = int(choice) - 1
                 actions = self.get_actions(idx)
-                
+
                 if not actions:
                     continue
-                
+
                 # If only one action, execute immediately, otherwise ask
                 if len(actions) == 1:
                     actions[0]["cmd"]()
