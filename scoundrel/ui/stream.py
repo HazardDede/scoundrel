@@ -1,6 +1,7 @@
 import streamlit as st
 from scoundrel import models
-from scoundrel.builders.decks import FantasyDeckBuilder, QuickWinDeckBuilder
+from scoundrel.builders.decks import StandardDeckBuilder, DeckFlavor
+from scoundrel.themes import FantasyTheme
 from scoundrel.engines import StandardRulesEngine
 
 
@@ -9,13 +10,12 @@ from scoundrel.engines import StandardRulesEngine
 def initialize_session():
     """Initializes the game state and engine in the session storage."""
     if 'state' not in st.session_state:
-        builder = FantasyDeckBuilder(easy=True)
-        # builder = QuickWinDeckBuilder()
+        builder = StandardDeckBuilder(DeckFlavor.Quick)
         engine = StandardRulesEngine()
 
         state = models.GameState(
             player=models.Player(),
-            deck=builder.build(shuffle=True),
+            deck=FantasyTheme().apply_to(builder.build(shuffle=True)),
             room=models.Room(),
         )
         engine.handle_next_room(state)
@@ -59,7 +59,7 @@ def render_sidebar(state):
 
 def render_monster_ui(engine, state, card, idx, active):
     """Renders monster specific action buttons."""
-    st.error(f"{card.emoji if card.emoji else '👹'} **{card.name}** (💪 {card.strength})")
+    st.error(f"{card.emoji or '👹'} **{card.name}** (💪 {card.strength})")
 
     # Weapon Attack
     if engine.can_attack_monster(state, card, True):
@@ -82,7 +82,7 @@ def render_monster_ui(engine, state, card, idx, active):
 
 def render_potion_ui(engine, state, card, idx, active):
     """Renders potion specific action buttons."""
-    st.success(f"🧪 **{card.name}** (❤️ +{card.potency})")
+    st.success(f"{card.emoji or '🧪'} **{card.name}** (❤️ +{card.potency})")
     if engine.can_drink_potion(state, card):
         p_heal = engine.preview_potion(state, card)
         if st.button(f"Trinken (+{p_heal.healing_received} LP)", key=f"pot_{idx}", disabled=not active):
@@ -95,7 +95,7 @@ def render_potion_ui(engine, state, card, idx, active):
 
 def render_weapon_ui(engine, state, card, idx, active):
     """Renders weapon specific action buttons."""
-    st.warning(f"⚔️ **{card.name}** (🛡️ {card.protection})")
+    st.warning(f"{card.emoji or '⚔'}️ **{card.name}** (🛡️ {card.protection})")
     if st.button("Ausrüsten", key=f"equip_{idx}", disabled=not active):
         engine.handle_equip_weapon(state, card)
         return True

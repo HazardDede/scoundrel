@@ -1,7 +1,8 @@
-from .decks import BeginnerDeckBuilder, DeckBuilder, StandardDeckBuilder
+from .decks import DeckBuilder, StandardDeckBuilder
+from .flavor import DeckFlavor
 
 __all__ = [
-    'BeginnerDeckBuilder',
     'DeckBuilder',
+    'DeckFlavor',
     'StandardDeckBuilder',
 ]

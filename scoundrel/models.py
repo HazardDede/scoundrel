@@ -14,6 +14,7 @@ CONST_WEAPON = "weapon"
 
 
 HighScore = int
+Rank = int
 
 
 class Suit(str, Enum):
@@ -35,7 +36,7 @@ class Card(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     suit: Suit
-    rank: int  # 2-10, 11 (J), 12 (Q), 13 (K), 14 (A)
+    rank: Rank  # 2-10, 11 (J), 12 (Q), 13 (K), 14 (A)
     name: str
     type: str  # Override in child classes
     emoji: Optional[str] = None

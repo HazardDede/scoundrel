@@ -1,5 +1,6 @@
 import pytest
 
+from scoundrel.builders import DeckFlavor
 from scoundrel.builders import StandardDeckBuilder
 from scoundrel.models import Monster, Potion, Weapon
 
@@ -17,15 +18,20 @@ def test_standard_builder_total_count(builder):
     assert deck.remaining == 44
 
 
-def test_standard_builder_composition_stats(builder):
+@pytest.mark.parametrize("flavor, expected_total, monsters, potions, weapons", [
+    (DeckFlavor.Beginner, 52, 26, 13, 13),
+    (DeckFlavor.Quick, 22, 14, 4, 4),
+    (DeckFlavor.Standard, 44, 26, 9, 9),
+])
+def test_standard_builder_composition_stats(flavor, expected_total, monsters, potions, weapons):
     """Uses the deck's own composition property to verify card types."""
-    deck = builder.build(shuffle=False)
+    deck = StandardDeckBuilder(flavor=flavor).build(shuffle=False)
     comp = deck.composition
     
-    assert comp.monsters == 26  # 2 Suits * 13 Ranks (2-14)
-    assert comp.potions == 9    # 1 Suit * 9 Ranks (2-10)
-    assert comp.weapons == 9    # 1 Suit * 9 Ranks (2-10)
-    assert comp.total == 44
+    assert comp.monsters == monsters
+    assert comp.potions == potions
+    assert comp.weapons == weapons
+    assert comp.total == expected_total
 
 
 def test_standard_builder_rank_ranges(builder):
