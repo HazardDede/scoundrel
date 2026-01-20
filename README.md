@@ -30,7 +30,7 @@ This project uses [uv](https://github.com/astral-sh/uv), an extremely fast Pytho
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/HazardDede/scoundrel.git](https://github.com/HazardDede/scoundrel.git)
+    git clone https://github.com/HazardDede/scoundrel.git
     cd scoundrel
     ```
 
@@ -53,7 +53,7 @@ uv run streamlit run scoundrel/ui/stream.py
 
 ![Scoundrel Screenshot](./assets/screenshot.png)
 
-### Console CLI
+### Console CLI (Experimental)
 For the retro, terminal-loving dungeon crawler.
 
 ```bash

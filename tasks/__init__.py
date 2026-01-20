@@ -2,6 +2,7 @@ from invoke import Collection
 
 from tasks import (
     config,
+    game,
     linting,
     testing
 )
@@ -17,3 +18,4 @@ ns.add_collection(test)
 
 # Tasks
 ns.add_task(config.config)
+ns.add_task(game.play)
