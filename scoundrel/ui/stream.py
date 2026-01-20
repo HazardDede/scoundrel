@@ -14,7 +14,7 @@ from scoundrel.engines import StandardRulesEngine
 def initialize_session():
     """Initializes the game state and engine in the session storage."""
     if 'state' not in st.session_state:
-        builder = StandardDeckBuilder(DeckFlavor.BEGINNER)
+        builder = StandardDeckBuilder(DeckFlavor.STANDARD)
         engine = StandardRulesEngine()
 
         state = models.GameState(
