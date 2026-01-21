@@ -160,7 +160,7 @@ class Room(BaseModel):
     A room is cleared when the player interacts with cards or flees.
     """
     cards: list[AnyCard] = Field(default_factory=list)
-    potions_used: int = Field(0, ge=0)
+    potions_used: int = Field(default=0, ge=0)
 
     @property
     def remaining(self) -> int:

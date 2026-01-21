@@ -21,6 +21,22 @@ class DeckBuilder(ABC):
     steps like shuffling, while delegating the specific card creation
     to subclasses.
     """
+
+    @classmethod
+    @abstractmethod
+    def supported_flavors(cls) -> list[str]:
+        """
+        Returns a list of supported flavors (like variants of the deck, e.g. easy / hard).
+        Each DeckBuilder should allow to pass a flavor argument when instantiating.
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    @abstractmethod
+    def default_flavor(cls) -> str:
+        """Returns the default flavor of the deck."""
+        raise NotImplementedError()
+
     def build(self, shuffle: bool = True) -> models.Deck:
         """
         The main entry point to create a ready-to-play deck.
@@ -61,14 +77,29 @@ class StandardDeckBuilder(DeckBuilder):
         DeckFlavor.STANDARD: (10, 10, 14)
     }
 
-    def __init__(self, flavor: DeckFlavor = DeckFlavor.STANDARD):
+    def __init__(self, flavor: str | DeckFlavor = DeckFlavor.STANDARD):
         """
         Initializes the builder with a specific flavor.
 
         Args:
             flavor: The preset that determines the deck's composition.
         """
-        self.flavor = flavor
+        if flavor not in self._CONFIG_MAX_RANKS:
+            raise ValueError(
+                f"The flavor '{flavor.value if isinstance(flavor, DeckFlavor) else str(flavor)}' is not supported."
+            )
+
+        self.flavor = flavor if isinstance(flavor, DeckFlavor) else DeckFlavor(flavor)
+
+    @classmethod
+    def supported_flavors(cls) -> list[str]:
+        return [
+            flavor.value for flavor in cls._CONFIG_MAX_RANKS
+        ]
+
+    @classmethod
+    def default_flavor(cls) -> str:
+        return DeckFlavor.STANDARD.value
 
     def _build(self) -> models.Deck:
         """

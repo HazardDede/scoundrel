@@ -20,8 +20,11 @@ def test_standard_builder_total_count(builder):
 
 @pytest.mark.parametrize("flavor, expected_total, monsters, potions, weapons", [
     (DeckFlavor.BEGINNER, 52, 26, 13, 13),
+    (DeckFlavor.BEGINNER.value, 52, 26, 13, 13),
     (DeckFlavor.QUICK, 22, 14, 4, 4),
+    (DeckFlavor.QUICK.value, 22, 14, 4, 4),
     (DeckFlavor.STANDARD, 44, 26, 9, 9),
+    (DeckFlavor.STANDARD.value, 44, 26, 9, 9),
 ])
 def test_standard_builder_composition_stats(flavor, expected_total, monsters, potions, weapons):
     """Uses the deck's own composition property to verify card types."""
@@ -32,6 +35,11 @@ def test_standard_builder_composition_stats(flavor, expected_total, monsters, po
     assert comp.potions == potions
     assert comp.weapons == weapons
     assert comp.total == expected_total
+
+
+def test_standard_builder_unsupported_flavor():
+    with pytest.raises(ValueError, match="The flavor 'unknown' is not supported"):
+        StandardDeckBuilder(flavor="unknown")
 
 
 def test_standard_builder_rank_ranges(builder):

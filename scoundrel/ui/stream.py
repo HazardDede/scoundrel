@@ -3,29 +3,36 @@ Scoundrel Streamlit frontend.
 """
 
 import streamlit as st
+
 from scoundrel import models
-from scoundrel.builders.decks import StandardDeckBuilder, DeckFlavor
-from scoundrel.themes import FantasyTheme
+from scoundrel.builders.decks import StandardDeckBuilder
 from scoundrel.engines import StandardRulesEngine
+from scoundrel.themes import FantasyTheme
 
 
 # --- CONFIGURATION ---
 
+def restart_game(flavor: str | None = None):
+    """Resets the game state to start a new game."""
+    builder = StandardDeckBuilder(flavor or StandardDeckBuilder.default_flavor())
+    engine = StandardRulesEngine()
+
+    state = models.GameState(
+        player=models.Player(),
+        deck=FantasyTheme().apply_to(builder.build(shuffle=True)),
+        room=models.Room(),
+    )
+    engine.handle_next_room(state)
+
+    st.session_state.builder = builder
+    st.session_state.state = state
+    st.session_state.engine = engine
+
+
 def initialize_session():
     """Initializes the game state and engine in the session storage."""
     if 'state' not in st.session_state:
-        builder = StandardDeckBuilder(DeckFlavor.STANDARD)
-        engine = StandardRulesEngine()
-
-        state = models.GameState(
-            player=models.Player(),
-            deck=FantasyTheme().apply_to(builder.build(shuffle=True)),
-            room=models.Room(),
-        )
-        engine.handle_next_room(state)
-
-        st.session_state.state = state
-        st.session_state.engine = engine
+        restart_game()
 
 
 def reset_game():
@@ -38,10 +45,36 @@ def reset_game():
 def render_sidebar(state):
     """Renders player stats and equipment info in the sidebar."""
     with st.sidebar:
+        with st.expander("⚙️ Einstellungen"):
+            flavor_options = st.session_state.builder.supported_flavors()
+            flavor_current = st.session_state.builder.flavor.value
+
+            try:
+                default_index = flavor_options.index(flavor_current)
+            except ValueError:
+                default_index = 0
+
+            deck_flavor_selector = st.selectbox(
+                label="Variante",
+                options=flavor_options,
+                index=default_index,
+                key="deck_flavor_selector"
+            )
+
+            if deck_flavor_selector != flavor_current:
+                st.sidebar.warning(
+                    "⚠️ Starte ein neues Spiel, um die Einstellungen zu übernehmen."
+                )
+
+            if st.button("🔄 Spiel neu starten", use_container_width=True):
+                restart_game(deck_flavor_selector)
+                st.rerun()
+
+        st.divider()
+
         st.header("Held")
         st.metric("Lebenspunkte ❤️", f"{state.player.current_life} / {state.player.max_life}")
 
-        st.divider()
         st.header("⚔️ Ausrüstung 🛡️")
 
         if state.player.has_weapon:
@@ -56,9 +89,6 @@ def render_sidebar(state):
                 st.info("Waffe ist unbenutzt.")
         else:
             st.write("Noch keine Waffe ausgerüstet.")
-
-        st.divider()
-        st.button("🔄 Spiel neu starten", use_container_width=True, on_click=reset_game)
 
 
 def render_monster_ui(engine, state, card, idx, active):
