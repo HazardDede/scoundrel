@@ -20,7 +20,9 @@ Before you start your adventure, you should familiarize yourself with the mechan
 * **Spades (♠) & Clubs (♣):** Monsters you must defeat.
 * **Objective:** Get through the entire deck and reach the end with as much health as possible.
 
+### 🎮 Quick Play
 
+[Scoundrel hosted on streamlit](https://scoundrel-dungeon.streamlit.app/)
 
 ---
 
