@@ -60,6 +60,12 @@ For the retro, terminal-loving dungeon crawler.
 uv run python -m scoundrel.ui.cli
 ```
 
+## ⚖️ License
+This project is licensed under **CC BY-NC-SA 3.0**. 
+See the [LICENSE](LICENSE) file for details. 
+Original game design by Zach Gage and Kurt Bieg.
+
+
 ## 🛠 Developer Guide
 We use Invoke to manage common development tasks.
 
