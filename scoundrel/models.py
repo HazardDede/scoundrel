@@ -12,6 +12,7 @@ from typing import Literal, Optional, Annotated, Union, Final
 from pydantic import BaseModel, Field, computed_field, ConfigDict
 
 from scoundrel import exc
+from scoundrel.localization.base import Translator
 
 # --- Constants for type-safe discriminators ---
 CONST_MONSTER: Final = "monster"
@@ -64,6 +65,17 @@ class Card(BaseModel):
         """Deterministic unique identifier based on suit and rank."""
         # Deterministic ID based on suit and rank (e.g., "SPADES_14")
         return f"{self.suit.value.upper()}_{self.rank}"
+
+    def localize(self, translator: Translator) -> 'Card':
+        """Localizes the card (name and emoji) using the given translator."""
+        translation_base_key = f"card.{self.suit.value.lower()}.{self.rank}"
+        name = translator.localize(f"{translation_base_key}.name")
+        emoji = translator.localize(f"{translation_base_key}.emoji")
+
+        return self.model_copy(update={
+            "name": name,
+            "emoji": emoji
+        })
 
     def __str__(self) -> str:
         return f"{self.name} ({self.card_id})"

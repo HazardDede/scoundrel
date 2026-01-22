@@ -1,13 +1,17 @@
 """
 Scoundrel Streamlit frontend.
 """
+import os.path
+from pathlib import Path
 
 import streamlit as st
 
 from scoundrel import models
 from scoundrel.builders.decks import StandardDeckBuilder
 from scoundrel.engines import StandardRulesEngine
-from scoundrel.themes import FantasyTheme
+from scoundrel.localization.json import JsonRegistry
+
+TRANSLATIONS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../assets/translations'))
 
 
 # --- CONFIGURATION ---
@@ -16,14 +20,18 @@ def restart_game(flavor: str | None = None):
     """Resets the game state to start a new game."""
     builder = StandardDeckBuilder(flavor or StandardDeckBuilder.default_flavor())
     engine = StandardRulesEngine()
+    registry = JsonRegistry(Path(TRANSLATIONS_PATH))
+    translator = registry.get_translator('de-DE', 'fantasy')
 
     state = models.GameState(
         player=models.Player(),
-        deck=FantasyTheme().apply_to(builder.build(shuffle=True)),
+        deck=builder.build(shuffle=True),
         room=models.Room(),
     )
     engine.handle_next_room(state)
 
+    st.session_state.translation_registry = registry
+    st.session_state.translator = translator
     st.session_state.builder = builder
     st.session_state.state = state
     st.session_state.engine = engine
@@ -35,17 +43,14 @@ def initialize_session():
         restart_game()
 
 
-def reset_game():
-    """Clears the session state to start a fresh game."""
-    del st.session_state.state
-
-
 # --- COMPONENT RENDERING ---
 
 def render_sidebar(state):
     """Renders player stats and equipment info in the sidebar."""
+    t = st.session_state.translator
+
     with st.sidebar:
-        with st.expander("⚙️ Einstellungen"):
+        with st.expander(t.localize('ui.sidebar.settings.label')):
             flavor_options = st.session_state.builder.supported_flavors()
             flavor_current = st.session_state.builder.flavor.value
 
@@ -55,7 +60,7 @@ def render_sidebar(state):
                 default_index = 0
 
             deck_flavor_selector = st.selectbox(
-                label="Variante",
+                label=t.localize('ui.sidebar.settings.selector_flavor.label'),
                 options=flavor_options,
                 index=default_index,
                 key="deck_flavor_selector"
@@ -63,51 +68,71 @@ def render_sidebar(state):
 
             if deck_flavor_selector != flavor_current:
                 st.sidebar.warning(
-                    "⚠️ Starte ein neues Spiel, um die Einstellungen zu übernehmen."
+                    t.localize('ui.sidebar.settings.warning_change.label')
                 )
 
-            if st.button("🔄 Spiel neu starten", use_container_width=True):
+            if st.button(t.localize("ui.sidebar.settings.button_restart.label"), use_container_width=True):
                 restart_game(deck_flavor_selector)
                 st.rerun()
 
         st.divider()
 
-        st.header("Held")
-        st.metric("Lebenspunkte ❤️", f"{state.player.current_life} / {state.player.max_life}")
+        st.header(t.localize('ui.sidebar.hero.label'))
+        st.metric(
+            t.localize('ui.sidebar.hero.health.label'),
+            t.localize('ui.sidebar.hero.health.value', player=state.player)
+        )
 
-        st.header("⚔️ Ausrüstung 🛡️")
+        st.header(t.localize('ui.sidebar.hero.weapon.label'))
 
         if state.player.has_weapon:
             equipped = state.player.equipped
-            st.success(f"🗡️ **{equipped.weapon.name}**\n\n⚡ {equipped.weapon.protection}")
+
+            st.success(t.localize(
+                'ui.sidebar.hero.weapon.equipped', weapon=equipped.weapon.localize(t)
+            ))
 
             if equipped.slain_monsters:
                 last_monster = equipped.slain_monsters[-1]
-                st.warning(f"Letzter Gegner: {last_monster.name} (Rang {last_monster.strength})")
-                st.caption(f"Effektiv gegen < {last_monster.strength}")
+                st.error(t.localize(
+                    'ui.sidebar.hero.weapon.last_slain',
+                    monster=last_monster.localize(t),
+                ))
             else:
-                st.info("Waffe ist unbenutzt.")
+                st.info(t.localize('ui.sidebar.hero.weapon.unused'))
         else:
-            st.write("Noch keine Waffe ausgerüstet.")
+            st.info(t.localize('ui.sidebar.hero.weapon.bare-handed'))
 
 
 def render_monster_ui(engine, state, card, idx, active):
     """Renders monster specific action buttons."""
-    st.error(f"{card.emoji or '👹'} **{card.name}** (💪 {card.strength})")
+    t = st.session_state.translator
+
+    st.error(t.localize('ui.main.room.monster.card', card=card.localize(t)))
 
     # Weapon Attack
     if engine.can_attack_monster(state, card, True):
         p_weapon = engine.preview_attack(state, card, True)
-        if st.button(f"Waffe (-{p_weapon.damage_taken} LP)", key=f"weapon_{idx}", disabled=not active):
+        if st.button(
+                t.localize('ui.main.room.button-attack-weapon.ok', preview=p_weapon),
+                key=f"weapon_{idx}", disabled=not active
+        ):
             engine.handle_monster_attack(state, card, True)
             return True
     else:
-        txt = "Waffe ineffektiv" if state.player.has_weapon else "Keine Waffe"
+        txt = (
+            t.localize('ui.main.room.button-attack-weapon.ineffective')
+            if state.player.has_weapon
+            else t.localize('ui.main.room.button-attack-weapon.no')
+        )
         st.button(txt, key=f"weapon_dis_{idx}", disabled=True)
 
     # Bare-Hand Attack
     p_fists = engine.preview_attack(state, card, False)
-    if st.button(f"Fäuste (-{p_fists.damage_taken} LP)", key=f"fist_{idx}", disabled=not active):
+    if st.button(
+            t.localize('ui.main.room.button-attack-bare-handed.label', preview=p_fists),
+            key=f"fist_{idx}", disabled=not active
+    ):
         engine.handle_monster_attack(state, card, False)
         return True
 
@@ -116,21 +141,29 @@ def render_monster_ui(engine, state, card, idx, active):
 
 def render_potion_ui(engine, state, card, idx, active):
     """Renders potion specific action buttons."""
-    st.success(f"{card.emoji or '🧪'} **{card.name}** (❤️ +{card.potency})")
+    t = st.session_state.translator
+
+    st.success(t.localize('ui.main.room.potion.card', card=card.localize(t)))
     if engine.can_drink_potion(state, card):
         p_heal = engine.preview_potion(state, card)
-        if st.button(f"Trinken (+{p_heal.healing_received} LP)", key=f"pot_{idx}", disabled=not active):
+        if st.button(
+            t.localize('ui.main.room.button-drink-potion.ok', preview=p_heal),
+            key=f"pot_{idx}", disabled=not active
+        ):
             engine.handle_drink_potion(state, card)
             return True
     else:
-        st.button("Nicht möglich", key=f"pot_dis_{idx}", disabled=True)
+        st.button(t.localize('ui.main.room.button-drink-potion.no'), key=f"pot_dis_{idx}", disabled=True)
+
     return False
 
 
 def render_weapon_ui(engine, state, card, idx, active):
     """Renders weapon specific action buttons."""
-    st.warning(f"{card.emoji or '⚔'}️ **{card.name}** (🛡️ {card.protection})")
-    if st.button("Ausrüsten", key=f"equip_{idx}", disabled=not active):
+    t = st.session_state.translator
+
+    st.warning(t.localize('ui.main.room.weapon.card', card=card.localize(t)))
+    if st.button(t.localize('ui.main.room.button-equip-weapon.ok'), key=f"equip_{idx}", disabled=not active):
         engine.handle_equip_weapon(state, card)
         return True
     return False
@@ -140,12 +173,13 @@ def render_weapon_ui(engine, state, card, idx, active):
 
 def main():
     """Main entrypoint."""
-    st.set_page_config(page_title="Scoundrel", layout="wide")
-    st.title("🃏 Scoundrel")
-
     initialize_session()
     state = st.session_state.state
     engine = st.session_state.engine
+    t = st.session_state.translator
+
+    st.set_page_config(page_title="Scoundrel", layout="wide")
+    st.title(t.localize('ui.main.title'))
 
     # Check endgame status once per rerun
     over_score = engine.is_game_over(state)
@@ -156,16 +190,16 @@ def main():
 
     # --- ENDGAME SCREENS ---
     if over_score is not None:
-        st.error(f"💀 GAME OVER\nDein Highscore: {over_score}")
+        st.error(t.localize('ui.main.game-over', score=over_score))
         return
 
     if victory_score is not None:
-        st.success(f"🏆 SIEG! - Du hast den Dungeon überlebt!\nHighscore: {victory_score}")
+        st.success(t.localize('ui.main.victory', score=victory_score))
         st.balloons()
         return
 
     # --- ROOM RENDERING ---
-    st.subheader(f"Aktueller Raum ({state.deck.remaining} Karten im Deck)")
+    st.subheader(t.localize('ui.main.room.label', deck=state.deck))
     cols = st.columns(4)
 
     action_taken = False
@@ -186,13 +220,17 @@ def main():
     # --- FLEE LOGIC ---
     st.divider()
     if engine.can_flee_room(state):
-        if st.button("🏃 In den nächsten Raum fliehen", use_container_width=True, disabled=not game_active):
+        if st.button(t.localize('ui.main.room.flee.ok'), use_container_width=True, disabled=not game_active):
             engine.handle_flee_room(state)
             engine.handle_next_room(state)
             st.rerun()
     else:
-        reason = "Raum schon begonnen" if len(state.room.cards) < 4 else "Aus dem letzten Raum geflohen"
-        st.button(f"Fliehen nicht möglich ({reason})", disabled=True, use_container_width=True)
+        txt = (
+            t.localize('ui.main.room.flee.no-started')
+            if len(state.room.cards) < 4
+            else t.localize('ui.main.room.flee.no-last-fleed')
+        )
+        st.button(txt, disabled=True, use_container_width=True)
 
 
 if __name__ == "__main__":

@@ -36,3 +36,6 @@ jobs:
 
       - name: Run Tests
         run: uv run invoke test
+
+      - name: Run Audit
+        run: uv run invoke audit

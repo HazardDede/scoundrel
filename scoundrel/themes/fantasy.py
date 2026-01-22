@@ -66,7 +66,7 @@ FANTASY_ATLAS: CardAtlas = {
     (Suit.DIAMONDS, 4): CardIdentity(name="Handaxt", emoji="🪓"),
     (Suit.DIAMONDS, 5): CardIdentity(name="Kurzschwert", emoji="⚔️"),
     (Suit.DIAMONDS, 6): CardIdentity(name="Kriegshammer", emoji="🔨"),
-    (Suit.DIAMONDS, 7): CardIdentity(name="Langschwert", emoji="🗡️"),
+    (Suit.DIAMONDS, 7): CardIdentity(name="Langschwert", emoji="🗡"),
     (Suit.DIAMONDS, 8): CardIdentity(name="Streitaxt", emoji="🪓"),
     (Suit.DIAMONDS, 9): CardIdentity(name="Zweihänder", emoji="⚔️"),
     (Suit.DIAMONDS, 10): CardIdentity(name="Kriegsbogen", emoji="🏹"),

@@ -14,5 +14,7 @@ def test_game_initialization():
     assert at.title[0].value == "🃏 Scoundrel"
 
     # Check if health starts at 20
-    hp_display = next(m for m in at.metric if m.label.startswith("Lebenspunkte"))
+    for m in at.metric:
+        print(m.label)
+    hp_display = next(m for m in at.metric if m.label.endswith("Lebenspunkte"))
     assert hp_display.value == "20 / 20"

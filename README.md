@@ -55,13 +55,6 @@ uv run streamlit run scoundrel/ui/stream.py
 
 ![Scoundrel Screenshot](./assets/screenshot.png)
 
-### Console CLI (Experimental)
-For the retro, terminal-loving dungeon crawler.
-
-```bash
-uv run python -m scoundrel.ui.cli
-```
-
 ## ⚖️ License
 This project is licensed under **CC BY-NC-SA 3.0**. 
 See the [LICENSE](LICENSE) file for details. 

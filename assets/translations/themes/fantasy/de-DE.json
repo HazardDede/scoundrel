@@ -1,0 +1,79 @@
+{
+  "ui": {
+    "main": {
+      "room": {
+        "monster": {
+          "card": "{card.emoji}&nbsp;&nbsp;&nbsp;&nbsp;**{card.name}** ( **{card.strength}** 💪 )"
+        },
+        "potion": {
+          "card": "{card.emoji}&nbsp;&nbsp;&nbsp;&nbsp;**{card.name}** ( **+{card.potency}** ❤️ )"
+        },
+        "weapon": {
+          "card": "{card.emoji}&nbsp;&nbsp;&nbsp;&nbsp;**{card.name}** ( **{card.protection}** 🛡 )"
+        }
+      }
+    }
+  },
+  "card": {
+    "clubs": {
+      "2": { "name": "Käfer", "emoji": "🪲" },
+      "3": { "name": "Skorpion", "emoji": "🦂" },
+      "4": { "name": "Spinne", "emoji": "🕷️" },
+      "5": { "name": "Wolf", "emoji": "🐺" },
+      "6": { "name": "Bär", "emoji": "🐻" },
+      "7": { "name": "Zombie", "emoji": "🧟" },
+      "8": { "name": "Geist", "emoji": "👻" },
+      "9": { "name": "Skelett", "emoji": "💀" },
+      "10": { "name": "Allsehendes Auge", "emoji": "👁️" },
+      "11": { "name": "Golem", "emoji": "🪨" },
+      "12": { "name": "Vampirlord", "emoji": "🧛‍" },
+      "13": { "name": "Dschinn", "emoji": "🧞" },
+      "14": { "name": "Drache", "emoji": "🐉" }
+    },
+    "spades": {
+      "2": { "name": "Fledermaus", "emoji": "🦇" },
+      "3": { "name": "Schleim", "emoji": "🟢" },
+      "4": { "name": "Schlange", "emoji": "🐍" },
+      "5": { "name": "Raubvogel", "emoji": "🦅" },
+      "6": { "name": "Alligator", "emoji": "🐊" },
+      "7": { "name": "Pilzkopf", "emoji": "🍄" },
+      "8": { "name": "Goblin", "emoji": "👹" },
+      "9": { "name": "Riesenoktopus", "emoji": "🐙" },
+      "10": { "name": "Gedankenschinder", "emoji": "🧠" },
+      "11": { "name": "Feuerelementar", "emoji": "🔥" },
+      "12": { "name": "Frostelementar", "emoji": "❄️" },
+      "13": { "name": "Chaosgeist", "emoji": "🧞‍" },
+      "14": { "name": "Blutdämon", "emoji": "🩸" }
+    },
+    "hearts": {
+      "2": { "name": "Heilkraut", "emoji": "🌿" },
+      "3": { "name": "Klarwasser", "emoji": "💧" },
+      "4": { "name": "Apfel", "emoji": "🍎" },
+      "5": { "name": "Kräutertrank", "emoji": "🧃" },
+      "6": { "name": "Wundsalbe", "emoji": "🩹" },
+      "7": { "name": "Goldener Honig", "emoji": "🍯" },
+      "8": { "name": "Heiltrank", "emoji": "🧪" },
+      "9": { "name": "Lebensessenz", "emoji": "💖" },
+      "10": { "name": "Erneuerungselixier", "emoji": "✨" },
+      "11": { "name": "Vitaltrank", "emoji": "🌱" },
+      "12": { "name": "Essenz der Lebenskraft", "emoji": "🔮" },
+      "13": { "name": "Elixier der Wiedergeburt", "emoji": "🌟" },
+      "14": { "name": "Herz des Lebens", "emoji": "💎" }
+    },
+    "diamonds": {
+      "2": { "name": "Knüppel", "emoji": "🪵" },
+      "3": { "name": "Dolch", "emoji": "🗡️" },
+      "4": { "name": "Handaxt", "emoji": "🪓" },
+      "5": { "name": "Kurzschwert", "emoji": "⚔️" },
+      "6": { "name": "Kriegshammer", "emoji": "🔨" },
+      "7": { "name": "Langschwert", "emoji": "🗡" },
+      "8": { "name": "Streitaxt", "emoji": "🪓" },
+      "9": { "name": "Zweihänder", "emoji": "⚔️" },
+      "10": { "name": "Kriegsbogen", "emoji": "🏹" },
+      "11": { "name": "Feuerzahn (Legendär)", "emoji": "🔥" },
+      "12": { "name": "Frostbiss (Legendär)", "emoji": "❄️" },
+      "13": { "name": "Himmelszorn (Legendär)", "emoji": "⚡" },
+      "14": { "name": "Weltenbrecher (Legendär)", "emoji": "💎" }
+    }
+  }
+}

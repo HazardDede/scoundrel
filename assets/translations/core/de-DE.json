@@ -1,0 +1,131 @@
+{
+  "ui": {
+    "sidebar": {
+      "settings": {
+        "label": "⚙️ Einstellungen",
+        "selector_flavor": {
+          "label": "Variante"
+        },
+        "warning_change": {
+          "label": "⚠️ Starte ein neues Spiel, um die Einstellungen zu übernehmen."
+        },
+        "button_restart": {
+          "label": "🔄 Spiel neu starten"
+        }
+      },
+      "hero": {
+        "label": "Held",
+        "health": {
+          "label": "❤️ Lebenspunkte",
+          "value": "{player.current_life} / {player.max_life}"
+        },
+        "weapon": {
+          "label": "⚔️ Ausrüstung 🛡",
+          "equipped": "🗡️ **{weapon.name}** ⚡ {weapon.protection}",
+          "last_slain": "{monster.emoji} **{monster.name}** (💪 {monster.strength})\n\nEffektiv gegen < 💪 {monster.strength}",
+          "unused": "Waffe ist unbenutzt",
+          "bare-handed": "Noch keine Waffe ausgerüstet"
+        }
+      }
+    },
+    "main": {
+      "title": "🃏 Scoundrel",
+      "game-over": "💀 GAME OVER\nDein Highscore: {score}",
+      "victory": "🏆 SIEG! - Du hast den Dungeon überlebt!\nHighscore: {score}",
+      "room": {
+        "label": "Aktueller Raum ({deck.remaining} Karten im Deck)",
+        "flee": {
+          "ok": "🏃 In den nächsten Raum fliehen",
+          "no-started": "Fliehen nicht möglich (Raum schon begonnen)",
+          "no-last-fleed": "Fliehen nicht möglich (Aus dem letzten Raum schon geflohen)"
+        },
+        "monster": {
+          "card": "{card.emoji} **{card.name}**"
+        },
+        "button-attack-weapon": {
+          "ok": "Waffe ( - {preview.damage_taken} &nbsp; ❤ &nbsp;)",
+          "ineffective": "Waffe ineffektiv",
+          "no": "Keine Waffe"
+        },
+        "button-attack-bare-handed": {
+          "label": "Fäuste ( - {preview.damage_taken} &nbsp; ❤ &nbsp;)"
+        },
+        "potion": {
+          "card": "{card.emoji} **{card.name}**"
+        },
+        "button-drink-potion": {
+          "ok": "Trinken ( + {preview.healing_received} &nbsp; ❤ &nbsp;)",
+          "no": "Nicht möglich"
+        },
+        "weapon": {
+          "card": "{card.emoji} **{card.name}**"
+        },
+        "button-equip-weapon": {
+          "ok": "Ausrüsten"
+        }
+      }
+    }
+  },
+  "card": {
+    "spades": {
+      "2": { "name": "Spades 2", "emoji": "♠️" },
+      "3": { "name": "Spades 3", "emoji": "♠️" },
+      "4": { "name": "Spades 4", "emoji": "♠️" },
+      "5": { "name": "Spades 5", "emoji": "♠️" },
+      "6": { "name": "Spades 6", "emoji": "♠️" },
+      "7": { "name": "Spades 7", "emoji": "♠️" },
+      "8": { "name": "Spades 8", "emoji": "♠️" },
+      "9": { "name": "Spades 9", "emoji": "♠️" },
+      "10": { "name": "Spades 10", "emoji": "♠️" },
+      "11": { "name": "Spades 11", "emoji": "♠️" },
+      "12": { "name": "Spades 12", "emoji": "♠️" },
+      "13": { "name": "Spades 13", "emoji": "♠️" },
+      "14": { "name": "Spades 14", "emoji": "♠️" }
+    },
+    "clubs": {
+      "2": { "name": "Clubs 2", "emoji": "♣️" },
+      "3": { "name": "Clubs 3", "emoji": "♣️" },
+      "4": { "name": "Clubs 4", "emoji": "♣️" },
+      "5": { "name": "Clubs 5", "emoji": "♣️" },
+      "6": { "name": "Clubs 6", "emoji": "♣️" },
+      "7": { "name": "Clubs 7", "emoji": "♣️" },
+      "8": { "name": "Clubs 8", "emoji": "♣️" },
+      "9": { "name": "Clubs 9", "emoji": "♣️" },
+      "10": { "name": "Clubs 10", "emoji": "♣️" },
+      "11": { "name": "Clubs 11", "emoji": "♣️" },
+      "12": { "name": "Clubs 12", "emoji": "♣️" },
+      "13": { "name": "Clubs 13", "emoji": "♣️" },
+      "14": { "name": "Clubs 14", "emoji": "♣️" }
+    },
+    "hearts": {
+      "2": { "name": "Hearts 2", "emoji": "♥️" },
+      "3": { "name": "Hearts 3", "emoji": "♥️" },
+      "4": { "name": "Hearts 4", "emoji": "♥️" },
+      "5": { "name": "Hearts 5", "emoji": "♥️" },
+      "6": { "name": "Hearts 6", "emoji": "♥️" },
+      "7": { "name": "Hearts 7", "emoji": "♥️" },
+      "8": { "name": "Hearts 8", "emoji": "♥️" },
+      "9": { "name": "Hearts 9", "emoji": "♥️" },
+      "10": { "name": "Hearts 10", "emoji": "♥️" },
+      "11": { "name": "Hearts 11", "emoji": "♥️" },
+      "12": { "name": "Hearts 12", "emoji": "♥️" },
+      "13": { "name": "Hearts 13", "emoji": "♥️" },
+      "14": { "name": "Hearts 14", "emoji": "♥️" }
+    },
+    "diamonds": {
+      "2": { "name": "Diamonds 2", "emoji": "♦️" },
+      "3": { "name": "Diamonds 3", "emoji": "♦️" },
+      "4": { "name": "Diamonds 4", "emoji": "♦️" },
+      "5": { "name": "Diamonds 5", "emoji": "♦️" },
+      "6": { "name": "Diamonds 6", "emoji": "♦️" },
+      "7": { "name": "Diamonds 7", "emoji": "♦️" },
+      "8": { "name": "Diamonds 8", "emoji": "♦️" },
+      "9": { "name": "Diamonds 9", "emoji": "♦️" },
+      "10": { "name": "Diamonds 10", "emoji": "♦️" },
+      "11": { "name": "Diamonds 11", "emoji": "♦️" },
+      "12": { "name": "Diamonds 12", "emoji": "♦️" },
+      "13": { "name": "Diamonds 13", "emoji": "♦️" },
+      "14": { "name": "Diamonds 14", "emoji": "♦️" }
+    }
+  }
+}
