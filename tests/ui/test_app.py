@@ -3,7 +3,7 @@ import os
 from streamlit.testing.v1 import AppTest
 
 
-APP_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../scoundrel/ui/stream.py'))
+APP_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../scoundrel/ui/app.py'))
 
 
 def test_game_initialization():

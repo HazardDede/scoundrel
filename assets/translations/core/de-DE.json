@@ -3,13 +3,19 @@
     "sidebar": {
       "settings": {
         "label": "⚙️ Einstellungen",
-        "selector_flavor": {
+        "selector-language": {
+          "label": "Sprache"
+        },
+        "selector-theme": {
+          "label": "Theme"
+        },
+        "selector-flavor": {
           "label": "Variante"
         },
-        "warning_change": {
+        "warning-change": {
           "label": "⚠️ Starte ein neues Spiel, um die Einstellungen zu übernehmen."
         },
-        "button_restart": {
+        "button-restart": {
           "label": "🔄 Spiel neu starten"
         }
       },
@@ -22,7 +28,7 @@
         "weapon": {
           "label": "⚔️ Ausrüstung 🛡",
           "equipped": "🗡️ **{weapon.name}** ⚡ {weapon.protection}",
-          "last_slain": "{monster.emoji} **{monster.name}** (💪 {monster.strength})\n\nEffektiv gegen < 💪 {monster.strength}",
+          "last-slain": "{monster.emoji} **{monster.name}** (💪 {monster.strength})\n\nEffektiv gegen < 💪 {monster.strength}",
           "unused": "Waffe ist unbenutzt",
           "bare-handed": "Noch keine Waffe ausgerüstet"
         }
@@ -30,8 +36,8 @@
     },
     "main": {
       "title": "🃏 Scoundrel",
-      "game-over": "💀 GAME OVER\nDein Highscore: {score}",
-      "victory": "🏆 SIEG! - Du hast den Dungeon überlebt!\nHighscore: {score}",
+      "game-over": "💀 GAME OVER\n\nDein Highscore: {score}",
+      "victory": "🏆 SIEG! - Du hast den Dungeon überlebt!\n\nHighscore: {score}",
       "room": {
         "label": "Aktueller Raum ({deck.remaining} Karten im Deck)",
         "flee": {

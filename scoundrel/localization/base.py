@@ -17,6 +17,7 @@ Example:
     print(translator.localize("ui.welcome", name="Alistair"))
 """
 from abc import ABC, abstractmethod
+from typing import Any
 
 
 class Translator(ABC):
@@ -27,7 +28,7 @@ class Translator(ABC):
     the actual string lookup and formatting.
     """
     @abstractmethod
-    def localize(self, translation_key: str, **kwargs: str | int | float) -> str:
+    def localize(self, translation_key: str, **kwargs: Any) -> str:
         """
         Retrieves and formats a localized string.
 
@@ -60,6 +61,16 @@ class Translator(ABC):
 
         Returns:
             A string representing the locale (e.g., 'en-US' or 'de-DE').
+        """
+
+    @property
+    @abstractmethod
+    def theme(self) -> str | None:
+        """
+        The theme associated with this translator instance.
+
+        Returns:
+            A string representing the theme (e.g., 'fantasy', 'sci-fi')
         """
 
 

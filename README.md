@@ -50,7 +50,7 @@ This project uses [uv](https://github.com/astral-sh/uv), an extremely fast Pytho
 The most visual way to play Scoundrel. It features a modern layout and real-time game state updates.
 
 ```bash
-uv run streamlit run scoundrel/ui/stream.py
+uv run streamlit run scoundrel/ui/app.py
 ```
 
 ![Scoundrel Screenshot](./assets/screenshot.png)

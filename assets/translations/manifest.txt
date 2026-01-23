@@ -1,13 +1,15 @@
 ui.sidebar.settings.label
-ui.sidebar.settings.selector_flavor.label
-ui.sidebar.settings.warning_change.label
-ui.sidebar.settings.button_restart.label
+ui.sidebar.settings.selector-language.label
+ui.sidebar.settings.selector-theme.label
+ui.sidebar.settings.selector-flavor.label
+ui.sidebar.settings.warning-change.label
+ui.sidebar.settings.button-restart.label
 ui.sidebar.hero.label
 ui.sidebar.hero.health.label
 ui.sidebar.hero.health.value
 ui.sidebar.hero.weapon.label
 ui.sidebar.hero.weapon.equipped
-ui.sidebar.hero.weapon.last_slain
+ui.sidebar.hero.weapon.last-slain
 ui.sidebar.hero.weapon.unused
 ui.sidebar.hero.weapon.bare-handed
 

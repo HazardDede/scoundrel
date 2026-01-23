@@ -31,7 +31,7 @@ class DictTranslator(Translator):
     A concrete implementation of the Translator interface that uses a dictionary
     as its data source. Supports nested keys via dot notation.
     """
-    def __init__(self, data: dict[str, Any], locale: str):
+    def __init__(self, data: dict[str, Any], locale: str, theme: str | None = None):
         """
         Initializes the translator with translation data and a locale code.
 
@@ -41,6 +41,7 @@ class DictTranslator(Translator):
         """
         self._data = data
         self._locale = str(locale)
+        self._theme = theme and str(theme)
 
     def _lookup(self, key) -> str | None:
         """
@@ -81,6 +82,10 @@ class DictTranslator(Translator):
     @property
     def locale_code(self) -> str:
         return self._locale
+
+    @property
+    def theme(self) -> str | None:
+        return self._theme
 
 
 class JsonRegistry(TranslationRegistry):
@@ -140,7 +145,7 @@ class JsonRegistry(TranslationRegistry):
                 theme_data = json.load(f)
                 self._deep_update(combined_data, theme_data)
 
-        return DictTranslator(combined_data, locale)
+        return DictTranslator(combined_data, locale, theme)
 
     def _deep_update(self, base_dict: dict, update_dict: dict):
         """

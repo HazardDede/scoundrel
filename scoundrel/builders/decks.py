@@ -29,13 +29,16 @@ class DeckBuilder(ABC):
         Returns a list of supported flavors (like variants of the deck, e.g. easy / hard).
         Each DeckBuilder should allow to pass a flavor argument when instantiating.
         """
-        raise NotImplementedError()
 
     @classmethod
     @abstractmethod
     def default_flavor(cls) -> str:
         """Returns the default flavor of the deck."""
-        raise NotImplementedError()
+
+    @property
+    @abstractmethod
+    def flavor(self) -> str:
+        """Returns the current flavor of the deck."""
 
     def build(self, shuffle: bool = True) -> models.Deck:
         """
@@ -89,7 +92,7 @@ class StandardDeckBuilder(DeckBuilder):
                 f"The flavor '{flavor.value if isinstance(flavor, DeckFlavor) else str(flavor)}' is not supported."
             )
 
-        self.flavor = flavor if isinstance(flavor, DeckFlavor) else DeckFlavor(flavor)
+        self._flavor = flavor if isinstance(flavor, DeckFlavor) else DeckFlavor(flavor)
 
     @classmethod
     def supported_flavors(cls) -> list[str]:
@@ -101,6 +104,10 @@ class StandardDeckBuilder(DeckBuilder):
     def default_flavor(cls) -> str:
         return DeckFlavor.STANDARD.value
 
+    @property
+    def flavor(self) -> str:
+        return self._flavor.value
+
     def _build(self) -> models.Deck:
         """
         Assembles the card list based on the chosen flavor's rank limits.
@@ -110,7 +117,7 @@ class StandardDeckBuilder(DeckBuilder):
         """
         cards: list[models.AnyCard] = []
 
-        r_potion, r_weapon, r_monster = self._CONFIG_MAX_RANKS[self.flavor]
+        r_potion, r_weapon, r_monster = self._CONFIG_MAX_RANKS[self._flavor]
 
         for r in range(2, r_potion + 1):
             cards.append(models.Potion(suit=models.Suit.HEARTS, rank=r, name="Heiltrank"))

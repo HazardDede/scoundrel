@@ -3,18 +3,24 @@
     "sidebar": {
       "settings": {
         "label": "⚙️ Settings",
-        "selector_flavor": {
+        "selector-language": {
+          "label": "Language"
+        },
+        "selector-theme": {
+          "label": "Language"
+        },
+        "selector-flavor": {
           "label": "Flavor"
         },
-        "warning_change": {
+        "warning-change": {
           "label": "⚠️ Start a new game to apply the settings"
         },
-        "button_restart": {
+        "button-restart": {
           "label": "🔄 Restart"
         }
       },
       "hero": {
-        "label": "Held",
+        "label": "Hero",
         "health": {
           "label": "❤️ Healthpoints",
           "value": "{player.current_life} / {player.max_life}"
@@ -22,7 +28,7 @@
         "weapon": {
           "label": "⚔️ Gear 🛡",
           "equipped": "🗡️ **{weapon.name}** ⚡ {weapon.protection}",
-          "last_slain": "{monster.emoji} **{monster.name}** (💪 {monster.strength})\n\nEffective against < 💪 {monster.strength}",
+          "last-slain": "{monster.emoji} **{monster.name}** (💪 {monster.strength})\n\nEffective against < 💪 {monster.strength}",
           "unused": "Weapon is unused",
           "bare-handed": "No weapon equipped yet"
         }
@@ -30,10 +36,10 @@
     },
     "main": {
       "title": "🃏 Scoundrel",
-      "game-over": "💀 GAME OVER\nYour Highscore: {score}",
-      "victory": "🏆 VICTORY! - You survived the dungeon!\nYour Highscore: {score}",
+      "game-over": "💀 GAME OVER\n\nYour Highscore: {score}",
+      "victory": "🏆 VICTORY! - You survived the dungeon!\n\nYour Highscore: {score}",
       "room": {
-        "label": "Current space ({deck.remaining} cards in deck)",
+        "label": "Current room ({deck.remaining} remaining cards in deck)",
         "flee": {
           "ok": "🏃 Flee to the next room",
           "no-started": "Escape not possible (room already started)",

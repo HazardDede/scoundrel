@@ -6,8 +6,9 @@ governs the interaction between game entities and enforces the
 mechanics of the Scoundrel card game.
 """
 
-from .rules import StandardRulesEngine
+from .rules import StandardRulesEngine, RulesEngine
 
 __all__ = [
     'StandardRulesEngine',
+    'RulesEngine'
 ]
