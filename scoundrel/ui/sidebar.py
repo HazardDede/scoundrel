@@ -5,7 +5,7 @@ from scoundrel.ui import flow
 from scoundrel.ui.models import AppConfig, AppState
 
 
-def render(state: AppState) -> None:
+def render(state: AppState) -> bool:
     """Renders player stats and equipment info in the sidebar."""
     t = state.translator
 
@@ -68,7 +68,7 @@ def render(state: AppState) -> None:
                 flow.restart_game(AppConfig(
                     language=language_selector, theme=theme_selector, flavor=deck_flavor_selector
                 ))
-                st.rerun()
+                return True
 
         st.divider()
 
@@ -98,3 +98,5 @@ def render(state: AppState) -> None:
                 st.info(t.localize('ui.sidebar.hero.weapon.unused'))
         else:
             st.info(t.localize('ui.sidebar.hero.weapon.bare-handed'))
+
+        return False

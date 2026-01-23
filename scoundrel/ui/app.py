@@ -27,7 +27,8 @@ def main() -> None:
     over_score = state.engine.is_game_over(state.game_state)
     victory_score = state.engine.is_victory(state.game_state)
 
-    sidebar.render(state)
+    if sidebar.render(state):
+        st.rerun()
 
     # --- ENDGAME SCREENS ---
     if over_score is not None:

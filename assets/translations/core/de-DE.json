@@ -27,7 +27,7 @@
         },
         "weapon": {
           "label": "⚔️ Ausrüstung 🛡",
-          "equipped": "🗡️ **{weapon.name}** ⚡ {weapon.protection}",
+          "equipped": "{weapon.emoji}&nbsp;&nbsp;**{weapon.name}** ⚡ {weapon.protection}",
           "last-slain": "{monster.emoji} **{monster.name}** (💪 {monster.strength})\n\nEffektiv gegen < 💪 {monster.strength}",
           "unused": "Waffe ist unbenutzt",
           "bare-handed": "Noch keine Waffe ausgerüstet"

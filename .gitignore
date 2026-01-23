@@ -211,3 +211,6 @@ __marimo__/
 
 # Mac related stuff
 .DS_Store
+
+# Unofficial translations / themes
+assets/translations/themes/minecraft
